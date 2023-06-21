@@ -7,8 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface UserCRUDRepository extends CrudRepository<User, Integer> {
-    public Optional<User> findByEmail(String email);
+    public Optional<User> findByUserEmail(String email);
 
-    @Query(value = "SELECT * FROM users WHERE email=? AND password=?", nativeQuery = true)
+    @Query(value = "SELECT * FROM users WHERE userEmail=? AND userPassword=?", nativeQuery = true)
     public Optional<User> validateLogin(String email, String password);
 }

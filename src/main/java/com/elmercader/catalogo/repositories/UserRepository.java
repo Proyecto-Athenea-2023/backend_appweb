@@ -28,7 +28,7 @@ public class UserRepository {
      * @return
      */
     public Optional<User> getByEmail(String email){
-        return userCRUDRepository.findByEmail(email);
+        return userCRUDRepository.findByUserEmail(email);
     }
 
     /**
