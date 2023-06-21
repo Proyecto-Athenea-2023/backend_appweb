@@ -9,7 +9,6 @@ function getUserByEmail(email){
         datatype: "JSON"
     })
     .done( function(response){
-        console.log(response);
         return response;
     })
     .fail(function(jqXHR, textStatus, errorThrown){
@@ -28,32 +27,38 @@ function createUser(){
     if(nameValidation(name)){
         if(emailValidation(email)){
             if(newPasswordValidation(password, confirmedPassword)){
-                if(!getUserByEmail(email)){
-                    user = {
-                        userName: name,
-                        userEmail: email,
-                        userPassword: password
-                    };
-                    let body = JSON.stringify(user);
+                if(passwordValidation)
+                    if(!getUserByEmail(email)){
+                        user = {
+                            userName: name,
+                            userEmail: email,
+                            userPassword: password
+                        };
+                        let body = JSON.stringify(user);
 
-                    $.ajax({
-                        url: URL_BASE + "/api/user/new",
-                        type: "POST",
-                        datatype: "JSON",
-                        data: body,
-                        contentType: "application/json;charset=UTF-8"
-                    })
-                    .done( function(response){
-                        console.log(response);
-                        alert("Usuario registrado correctamente.");
-                    })
-                    .fail(function(jqXHR, textStatus, errorThrown){
-                        console.log("Error in createUser. " + textStatus);
-                        alert("El registro del usuario ha fallado. Por favor, intente de nuevo.");
-                    })
-                }
-                else
-                    alert("Ya existe un usuario registrado con el mismo email. Por favor, utilizar un email diferente.");
+                        $.ajax({
+                            url: URL_BASE + "/api/user/new",
+                            type: "POST",
+                            datatype: "JSON",
+                            data: body,
+                            contentType: "application/json;charset=UTF-8"
+                        })
+                        .done( function(response){
+                            console.log(response);
+                            if(response)
+                                alert("Usuario registrado correctamente.");
+                            else
+                                alert("El usuario no ha podido ser registrado. Verifique la informacion e intente de nuevo.");
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown){
+                            console.log("Error in createUser. " + textStatus);
+                            alert("El registro del usuario ha fallado. Por favor, intente de nuevo.");
+                        })
+                    }
+                    else
+                        alert("Ya existe un usuario registrado con el mismo email. Por favor, utilizar un email diferente.");
+               else
+                    alert("La contrasenia debe ser de minimo seis caracteres.");
             }
             else
                 alert("Las contrasenias no son iguales. Verifique de nuevo por favor.");
@@ -80,12 +85,15 @@ function validateLogin(){
         })
         .done( function(response){
             console.log(response);
-            alert("Usuario con ingreso valido.");
+            if(response)
+                alert("Usuario con ingreso valido.");
+            else
+                alert("Usuario con ingreso incorrecto.");
             // TODO redirect to profile or main profile screen
         })
         .fail(function(jqXHR, textStatus, errorThrown){
             console.log("Error in validate login. " + textStatus);
-            alert("Usuario con ingreso incorrecto.");
+            alert("Falla en la plataforma. No se puede validar ingreso del usuario.");
             // TODO redirect to profile or main profile screen
         })
     }

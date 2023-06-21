@@ -10,6 +10,11 @@ function emailValidation(email){
 };
 
 
+function passwordValidation(password){
+    return password.length >= 6? true : false;
+}
+
+
 function newPasswordValidation(password, confirmed_password){
     if(password === confirmed_password)
         return true;
